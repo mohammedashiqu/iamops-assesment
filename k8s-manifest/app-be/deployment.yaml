@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-be-app
+  namespace: app-be
+  labels:
+    app: app-be
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-be
+  minReadySeconds: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: app-be
+    spec: 
+      containers:
+        - name: app-be
+          image: 637423338408.dkr.ecr.us-east-1.amazonaws.com/app-be:5-IAMOPS
+          imagePullPolicy: IfNotPresent
+          # resources:
+          #   requests:
+          #     memory: "500Mi"
+          #     cpu: "100m"
+          #   limits:
+          #     memory: "500Mi"
+          #     cpu: "100m"
+          ports:
+          - containerPort: 5600
+          # envFrom:
+          #   - secretRef:
+          #       name: app-be-infisical-secret
+          # readinessProbe:
+          #   httpGet:
+          #     path: /auth
+          #     port: 9001
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 60
+          #   timeoutSeconds: 5
+          #   successThreshold: 1
+          #   failureThreshold: 3
+          # livenessProbe:
+          #   httpGet:
+          #     path: /auth
+          #     port: 9001
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 60
+          #   timeoutSeconds: 5
+          #   successThreshold: 1
+          #   failureThreshold: 3

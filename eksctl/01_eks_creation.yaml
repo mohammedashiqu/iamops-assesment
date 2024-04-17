@@ -1,0 +1,68 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: BTF-IAMOPS-DEV-MUM-K8S-01
+  region: us-east-1
+  version: "1.29"
+
+vpc:
+  id: "vpc-0f857b5585ac815a0"
+  cidr: "10.0.0.0/16"
+  subnets:
+    private:
+      us-east-1a:
+        id: "subnet-05218958400c2690d"
+        cidr: "10.0.51.0/24"
+      us-east-1b:
+        id: "subnet-0e37f3a818e32ddb3"
+        cidr: "10.0.52.0/24"
+      us-east-1c:
+        id: "subnet-04d225e156b6acf2b"
+        cidr: "10.0.53.0/24"
+    public:
+      us-east-1a:
+        id: "subnet-041b22534eabe60a5"
+        cidr: "10.0.1.0/24"
+      us-east-1b:
+        id: "subnet-0b3e2439774f2908c"
+        cidr: "10.0.2.0/24"
+      us-east-1c:
+        id: "subnet-0aa17c8368f97dc30"
+        cidr: "10.0.3.0/24"
+
+managedNodeGroups:
+  - name: BTF-IAMOPS-DEV-MUM-K8S-GRP-01
+    minSize: 1
+    desiredCapacity: 1
+    maxSize: 3
+    instanceType: t2.medium
+    volumeSize: 30
+    spot: false
+    privateNetworking: true
+    ssh:
+      allow: true
+      publicKeyName: BTF-IAMOPS-DEV-MUM-KEY-01
+    iam:
+      withAddonPolicies:
+        imageBuilder: true
+        autoScaler: true
+        externalDNS: true
+        certManager: true
+        appMesh: true
+        appMeshPreview: true
+        ebs: true
+        fsx: true
+        efs: true
+        awsLoadBalancerController: true
+        xRay: true
+        cloudWatch: true
+        albIngress: true
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: full-access
+      labels: {aws-usage: "application"}
+    attachPolicyARNs:
+    - "arn:aws:iam::aws:policy/AdministratorAccess"

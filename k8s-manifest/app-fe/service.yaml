@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-fe-svc
+  namespace: app-fe
+  labels:
+    app: app-fe
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      name: http # Updated port name
+      port: 3000
+      targetPort: 3000
+  selector:
+    app: app-fe

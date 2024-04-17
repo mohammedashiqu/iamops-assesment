@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-fe-app
+  namespace: app-fe
+  labels:
+    app: app-fe
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-fe
+  minReadySeconds: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: app-fe
+    spec: 
+      containers:
+        - name: app-fe
+          image: 637423338408.dkr.ecr.us-east-1.amazonaws.com/app-fe:7-IAMOPS
+          imagePullPolicy: IfNotPresent
+          # resources:
+          #   requests:
+          #     memory: "500Mi"
+          #     cpu: "100m"
+          #   limits:
+          #     memory: "500Mi"
+          #     cpu: "100m"
+          ports:
+          - containerPort: 3000
+          # envFrom:
+          #   - secretRef:
+          #       name: app-fe-infisical-secret
+          # readinessProbe:
+          #   httpGet:
+          #     path: /auth
+          #     port: 9001
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 60
+          #   timeoutSeconds: 5
+          #   successThreshold: 1
+          #   failureThreshold: 3
+          # livenessProbe:
+          #   httpGet:
+          #     path: /auth
+          #     port: 9001
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 60
+          #   timeoutSeconds: 5
+          #   successThreshold: 1
+          #   failureThreshold: 3

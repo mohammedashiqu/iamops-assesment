@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-be-svc
+  namespace: app-be
+  labels:
+    app: app-be
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      name: http # Updated port name
+      port: 5600
+      targetPort: 5600
+  selector:
+    app: app-be
